@@ -1,0 +1,19 @@
+{
+  "predicate": "All",
+  "rules": [
+    {
+      "field": "sender",
+      "predicate": "contains",
+      "value": "sprpremkumar@gmail.com"
+    }
+  ],
+  "actions": [
+    {
+      "type": "mark_as_read"
+    },
+    {
+      "type": "move_message",
+      "destination": "Processed"
+    }
+  ]
+}
