@@ -2,7 +2,7 @@
   "predicate": "All",
   "rules": [
     {
-      "field": "sender",
+      "field": "to",
       "predicate": "contains",
       "value": "sprpremkumar@gmail.com"
     }
@@ -13,7 +13,7 @@
     },
     {
       "type": "move_message",
-      "destination": "Processed"
+      "destination": "Starred"
     }
   ]
 }

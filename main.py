@@ -17,7 +17,7 @@ _gmail_service = GmailService()
 _email_db_client = EmailSqlDBClient()
 
 
-def _insert_gmail_to_db() -> None:
+def __insert_gmail_to_db() -> None:
     """
     Fetches messages from Gmail and inserts them into the local database.
 
@@ -27,7 +27,7 @@ def _insert_gmail_to_db() -> None:
     _email_db_client.insert_emails_batch(gmail_messages)
 
 
-def _load_rule_json_file(path: str = "rules.json") -> dict:
+def __load_rule_json_file(path: str = "rules.json") -> dict:
     """
     Loads the rule configuration from a JSON file.
 
@@ -39,7 +39,7 @@ def _load_rule_json_file(path: str = "rules.json") -> dict:
         return json.load(json_file)
 
 
-def _process_rules(rule_json: dict) -> None:
+def __process_rules(rule_json: dict) -> None:
     """
     Processes emails in the database against the provided rule JSON.
 
@@ -59,9 +59,9 @@ def main() -> None:
 
     :return: None
     """
-    _insert_gmail_to_db()
-    rule_json = _load_rule_json_file()
-    _process_rules(rule_json)
+    __insert_gmail_to_db()
+    rule_json = __load_rule_json_file()
+    __process_rules(rule_json)
 
 
 if __name__ == "__main__":

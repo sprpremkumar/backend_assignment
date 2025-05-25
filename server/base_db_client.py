@@ -5,9 +5,11 @@ Created By: Prem Kumar R on 24-05-2025 at 12 PM
 import sqlite3
 from typing import Optional
 
+from constant import DBPath
+
 
 class BaseSqlDBClient:
-    def __init__(self, db_path: str = "database.db", persistent: bool = False):
+    def __init__(self, db_path: str = DBPath.DATABASE, persistent: bool = False):
         """
         Initializes the base database client.
 
@@ -26,6 +28,7 @@ class BaseSqlDBClient:
         Provides a SQLite connection.
 
         :return: SQLite connection object.
+        :rtype: sqlite3.Connection
         """
         if self.persistent and self.conn:
             return self.conn
@@ -36,6 +39,8 @@ class BaseSqlDBClient:
     def close(self) -> None:
         """
         Closes the persistent database connection if it exists.
+
+        :return: None
         """
         if self.persistent and self.conn:
             self.conn.close()

@@ -15,8 +15,8 @@ class JsonFileName:
     """
     Filenames for OAuth2 credential and token storage.
     """
-    CREDENTIALS = 'credentials.json'
-    TOKEN = 'token.json'
+    CREDENTIALS = '/Users/premkumar/PycharmProjects/backend_assignment/config/credentials.json'
+    TOKEN = '/Users/premkumar/PycharmProjects/backend_assignment/config/token.json'
 
 
 class Operation:
@@ -117,8 +117,8 @@ class SqlStatement:
     CREATE_TABLE_STATEMENT = """
         CREATE TABLE IF NOT EXISTS emails (
             id TEXT PRIMARY KEY,
-            from TEXT,
-            to TEXT,
+            "from" TEXT,
+            "to" TEXT,
             subject TEXT,
             body TEXT,
             received_at INTEGER,
@@ -126,7 +126,7 @@ class SqlStatement:
         )
     """
     INSERT_STATEMENT = """
-        INSERT OR IGNORE INTO emails (id, sender, recipient, subject, body, received_at, labels)
+        INSERT OR IGNORE INTO emails (id, "from", "to", subject, body, received_at, labels)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """
     LIST_STATEMENT = "SELECT * FROM emails"
@@ -175,5 +175,15 @@ class Field:
     DESTINATION = 'destination'
 
 class Labels:
+    """
+    Gmail labels
+    """
     READ = 'READ'
     UNREAD = 'UNREAD'
+
+class DBPath:
+    """
+    DB path
+    """
+    DATABASE = 'database.db'
+    EMAILS = 'emails.db'

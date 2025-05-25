@@ -36,6 +36,7 @@ class EmailRuleProcessor:
         :return: Result of predicate evaluation
         :rtype: bool
         """
+        print(email_value, value)
         return {
             Predicate.CONTAINS: lambda: value in email_value,
             Predicate.DOES_NOT_CONTAINS: lambda: value not in email_value,
@@ -65,7 +66,7 @@ class EmailRuleProcessor:
             Predicate.GREATER_THAN_DAYS: lambda: email_value < now - delta_days,
         }.get(predicate, lambda: False)()
 
-    def _evaluate_condition(self, email: dict, condition: dict) -> bool:
+    def __evaluate_condition(self, email: dict, condition: dict) -> bool:
         """
         Evaluate a single condition against a given email.
 
@@ -76,20 +77,20 @@ class EmailRuleProcessor:
         """
         field = condition[RuleProperty.FIELD]
         predicate = condition[RuleProperty.PREDICATE].lower()
-        value = condition[RuleProperty.VALUE].lower()
+        value = condition[RuleProperty.VALUE]
         email_value = email.get(field, "").lower()
 
         if field not in EmailColumn.SUPPORTED_FIELDS:
             raise ValueError(f"Field '{field}' is not supported.")
 
         if field in EmailColumn.STRING_FIELDS:
-            return self.__evaluate_string_field(predicate, email_value, value)
+            return self.__evaluate_string_field(predicate, email_value, value.lower())
         elif field in EmailColumn.DATE_FIELDS:
             return self.__evaluate_date_field(predicate, email_value, value)
 
         return False
 
-    def evaluate_email(self, email: dict) -> bool:
+    def __evaluate_email(self, email: dict) -> bool:
         """
         Evaluate all rules against a single email.
 
@@ -97,7 +98,8 @@ class EmailRuleProcessor:
         :return: True if email satisfies rules, else False
         :rtype: bool
         """
-        results = [self._evaluate_condition(email, rule) for rule in self.rules]
+        results = [self.__evaluate_condition(email, rule) for rule in self.rules]
+        print(results)
 
         if self.predicate == Predicate.ALL:
             return all(results)
@@ -106,7 +108,7 @@ class EmailRuleProcessor:
 
         return False
 
-    def apply_actions(self, email: dict) -> None:
+    def __apply_actions(self, email: dict) -> None:
         """
         Apply configured actions to an email if it matches the rule.
 
@@ -139,7 +141,7 @@ class EmailRuleProcessor:
                     EmailColumn.LABELS: destination
                 })
                 self.gmail_service.update_message(email_id, {
-                    RequestParam.REMOVE_LABEL_IDS: [destination]
+                    RequestParam.ADD_LABEL_IDS: [destination.upper()]
                 })
 
     def process(self, emails: list[dict]) -> None:
@@ -149,5 +151,5 @@ class EmailRuleProcessor:
         :param list emails: List of email data dictionaries
         """
         for email in emails:
-            if self.evaluate_email(email):
-                self.apply_actions(email)
+            if self.__evaluate_email(email):
+                self.__apply_actions(email)
